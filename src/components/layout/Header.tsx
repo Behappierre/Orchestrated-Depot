@@ -60,7 +60,7 @@ export function Header() {
   });
 
   return (
-    <header className="h-14 bg-slate-900/80 backdrop-blur-sm border-b border-slate-800 flex items-center px-4 gap-4">
+    <header className="h-14 bg-slate-900/80 backdrop-blur-sm border-b border-slate-800 flex items-center px-4 gap-4 relative z-50">
       {/* Title & Location */}
       <div className="flex items-center gap-4">
         <h1 className="text-lg font-semibold text-white">
@@ -79,7 +79,7 @@ export function Header() {
           </button>
 
           {showDepotDropdown && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden">
+            <div className="absolute top-full left-0 mt-1 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-[100] overflow-hidden">
               {depots.map((depot) => (
                 <button
                   key={depot.id}
