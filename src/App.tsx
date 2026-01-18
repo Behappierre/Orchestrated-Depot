@@ -8,9 +8,10 @@ import { FleetView } from './components/fleet/FleetView';
 import { EnergyView } from './components/energy/EnergyView';
 import { ScenarioView } from './components/scenarios/ScenarioView';
 import { GuideView } from './components/guide/GuideView';
+import { clsx } from 'clsx';
 
 function App() {
-  const { currentView, tick, isSimulationRunning, runOrchestrationCheck } = useAppStore();
+  const { currentView, tick, isSimulationRunning, runOrchestrationCheck, isDarkMode } = useAppStore();
 
   // Run simulation tick every 2 seconds
   useEffect(() => {
@@ -48,7 +49,12 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
+    <div className={clsx(
+      'flex h-screen overflow-hidden transition-colors duration-200',
+      isDarkMode
+        ? 'bg-slate-950 text-white'
+        : 'bg-slate-100 text-slate-900 light'
+    )}>
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />

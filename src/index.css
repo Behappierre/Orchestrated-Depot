@@ -109,7 +109,8 @@
   }
 
   .kpi-label {
-    @apply text-xs text-slate-400 uppercase tracking-wider;
+    @apply text-xs uppercase tracking-wider;
+    color: #94a3b8;
   }
 
   .kpi-trend {
@@ -122,7 +123,8 @@
   }
 
   .data-table thead {
-    @apply text-xs text-slate-400 uppercase tracking-wider;
+    @apply text-xs uppercase tracking-wider;
+    color: #94a3b8;
   }
 
   .data-table th {
@@ -381,17 +383,101 @@
   scrollbar-width: none;
 }
 
-/* Light mode overrides */
+/* ============================================================================
+   LIGHT MODE OVERRIDES
+   ============================================================================ */
+
 .light {
   @apply bg-slate-100 text-slate-900;
 }
 
+/* Glass card in light mode */
 .light .glass-card {
-  @apply bg-white/80 border-slate-200;
+  @apply bg-white/90 border-slate-200 shadow-sm;
 }
 
+/* Text colors */
+.light .text-white {
+  @apply text-slate-900;
+}
+
+.light .text-slate-100 {
+  @apply text-slate-800;
+}
+
+.light .text-slate-200 {
+  @apply text-slate-700;
+}
+
+.light .text-slate-300 {
+  @apply text-slate-600;
+}
+
+.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+.light .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Background colors */
+.light .bg-slate-900 {
+  background-color: #f8fafc !important;
+}
+
+.light .bg-slate-900\/50 {
+  background-color: rgba(248, 250, 252, 0.8) !important;
+}
+
+.light .bg-slate-900\/95 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+
+.light .bg-slate-800 {
+  background-color: #f1f5f9 !important;
+}
+
+.light .bg-slate-800\/50 {
+  background-color: rgba(241, 245, 249, 0.5) !important;
+}
+
+.light .bg-slate-800\/30 {
+  background-color: rgba(241, 245, 249, 0.3) !important;
+}
+
+.light .bg-slate-700 {
+  background-color: #e2e8f0 !important;
+}
+
+.light .bg-slate-700\/50 {
+  background-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+.light .bg-slate-950 {
+  background-color: #f8fafc !important;
+}
+
+/* Border colors */
+.light .border-slate-700 {
+  border-color: #e2e8f0 !important;
+}
+
+.light .border-slate-700\/50 {
+  border-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+.light .border-slate-800 {
+  border-color: #e2e8f0 !important;
+}
+
+.light .border-slate-800\/50 {
+  border-color: rgba(226, 232, 240, 0.5) !important;
+}
+
+/* Data table */
 .light .data-table th {
-  @apply border-slate-200;
+  @apply border-slate-200 text-slate-600;
 }
 
 .light .data-table td {
@@ -400,4 +486,171 @@
 
 .light .data-table tbody tr:hover {
   @apply bg-slate-50;
+}
+
+.light .data-table thead {
+  @apply text-slate-600;
+}
+
+/* Alert cards light mode */
+.light .bg-red-950\/20,
+.light .bg-red-950\/10 {
+  background-color: rgba(254, 226, 226, 0.6) !important;
+}
+
+.light .bg-amber-950\/20 {
+  background-color: rgba(254, 243, 199, 0.6) !important;
+}
+
+.light .bg-blue-950\/20 {
+  background-color: rgba(219, 234, 254, 0.6) !important;
+}
+
+.light .bg-emerald-500\/10 {
+  background-color: rgba(209, 250, 229, 0.6) !important;
+}
+
+.light .bg-blue-500\/10 {
+  background-color: rgba(219, 234, 254, 0.6) !important;
+}
+
+.light .bg-blue-500\/20 {
+  background-color: rgba(191, 219, 254, 0.6) !important;
+}
+
+.light .bg-red-500\/10 {
+  background-color: rgba(254, 226, 226, 0.6) !important;
+}
+
+.light .bg-red-500\/20 {
+  background-color: rgba(254, 202, 202, 0.6) !important;
+}
+
+.light .bg-amber-500\/10 {
+  background-color: rgba(254, 243, 199, 0.6) !important;
+}
+
+.light .bg-amber-500\/20 {
+  background-color: rgba(253, 230, 138, 0.6) !important;
+}
+
+/* Input and form elements */
+.light input,
+.light select {
+  @apply bg-white border-slate-300 text-slate-900;
+}
+
+.light input::placeholder {
+  color: #64748b !important;
+}
+
+/* Scrollbar light mode */
+.light ::-webkit-scrollbar-track {
+  background-color: #f1f5f9;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Charger cards in light mode */
+.light .charger-item {
+  @apply bg-white border border-slate-200;
+}
+
+/* Sidebar light mode */
+.light aside {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border-color: #e2e8f0 !important;
+}
+
+.light aside .text-white {
+  @apply text-slate-800;
+}
+
+.light aside .bg-slate-800 {
+  background-color: #e2e8f0 !important;
+}
+
+.light aside button:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* Header light mode */
+.light header {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* KPI cards light mode */
+.light .kpi-card {
+  @apply bg-white border-slate-200;
+}
+
+.light .kpi-label {
+  color: #64748b !important;
+}
+
+/* Hover states */
+.light .hover\:bg-slate-800:hover {
+  background-color: #e2e8f0 !important;
+}
+
+.light .hover\:bg-slate-700:hover {
+  background-color: #cbd5e1 !important;
+}
+
+.light .hover\:bg-slate-600:hover {
+  background-color: #94a3b8 !important;
+}
+
+.light .hover\:bg-white\/5:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Map legend and controls in light mode */
+.light .leaflet-container {
+  @apply bg-slate-100;
+}
+
+/* Recharts light mode */
+.light .recharts-cartesian-grid-horizontal line,
+.light .recharts-cartesian-grid-vertical line {
+  stroke: #e2e8f0;
+}
+
+.light .recharts-text {
+  fill: #64748b;
+}
+
+/* Progress bar backgrounds */
+.light .bg-slate-700 {
+  background-color: #e2e8f0 !important;
+}
+
+/* Specific component fixes */
+.light .font-mono.text-xs.text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Status badges keep their colors */
+.light .bg-blue-500\/20,
+.light .bg-emerald-500\/20,
+.light .bg-amber-500\/20,
+.light .bg-red-500\/20,
+.light .bg-slate-500\/20 {
+  /* These keep opacity variants for badges */
+}
+
+/* Scenario cards */
+.light .ring-1.ring-red-500\/30 {
+  --tw-ring-color: rgba(239, 68, 68, 0.3);
+}
+
+.light .ring-1.ring-emerald-500\/30 {
+  --tw-ring-color: rgba(16, 185, 129, 0.3);
 }
