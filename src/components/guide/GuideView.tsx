@@ -10,9 +10,7 @@ import {
   Clock,
   TrendingUp,
   Layers,
-  ArrowRight,
   CheckCircle2,
-  XCircle,
   ChevronDown,
   ChevronRight,
 } from 'lucide-react';
