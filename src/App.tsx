@@ -7,6 +7,7 @@ import { MapView } from './components/map/MapView';
 import { FleetView } from './components/fleet/FleetView';
 import { EnergyView } from './components/energy/EnergyView';
 import { ScenarioView } from './components/scenarios/ScenarioView';
+import { GuideView } from './components/guide/GuideView';
 
 function App() {
   const { currentView, tick, isSimulationRunning, runOrchestrationCheck } = useAppStore();
@@ -39,6 +40,8 @@ function App() {
         return <EnergyView />;
       case 'scenarios':
         return <ScenarioView />;
+      case 'guide':
+        return <GuideView />;
       default:
         return <DashboardView />;
     }

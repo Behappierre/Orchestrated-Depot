@@ -308,7 +308,7 @@ export interface EnergyTariff {
 // APP STATE TYPES
 // ============================================================================
 
-export type ViewType = 'dashboard' | 'map' | 'fleet' | 'energy' | 'scenarios';
+export type ViewType = 'dashboard' | 'map' | 'fleet' | 'energy' | 'scenarios' | 'guide';
 
 export interface SimulationState {
   isRunning: boolean;

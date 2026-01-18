@@ -17,6 +17,7 @@ const viewTitles: Record<string, string> = {
   fleet: 'Fleet Operations',
   energy: 'Energy & Infrastructure',
   scenarios: 'Scenario Playback',
+  guide: 'Demo Guide',
 };
 
 const systemIntegrations = [

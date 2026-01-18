@@ -4,7 +4,8 @@ import {
   Bus,
   Zap,
   Play,
-  Layers
+  Layers,
+  BookOpen,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 import type { ViewType } from '../../types';
@@ -16,6 +17,7 @@ const navItems: { id: ViewType; icon: typeof LayoutDashboard; label: string }[] 
   { id: 'fleet', icon: Bus, label: 'Fleet' },
   { id: 'energy', icon: Zap, label: 'Energy' },
   { id: 'scenarios', icon: Play, label: 'Scenarios' },
+  { id: 'guide', icon: BookOpen, label: 'Guide' },
 ];
 
 export function Sidebar() {
