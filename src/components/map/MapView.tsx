@@ -272,22 +272,27 @@ export function MapView() {
                 position={[chargerLat, chargerLng]}
                 icon={createChargerIcon(charger.status)}
               >
-                <Popup>
+                <Popup className="dark-popup">
                   <div className="font-sans text-sm">
-                    <div className="font-bold text-slate-900">{charger.id}</div>
-                    <div className="text-slate-600">{charger.power}kW {charger.connectionType}</div>
+                    <div className="font-bold">{charger.id}</div>
+                    <div className="opacity-70">{charger.power}kW {charger.connectionType}</div>
                     <div className={clsx(
                       'font-medium mt-1',
-                      charger.status === 'Active' && 'text-blue-600',
-                      charger.status === 'Faulted' && 'text-red-600',
-                      charger.status === 'Available' && 'text-gray-600'
+                      charger.status === 'Active' && 'text-blue-500',
+                      charger.status === 'Faulted' && 'text-red-500',
+                      charger.status === 'Available' && 'opacity-60'
                     )}>
                       {charger.status}
                       {charger.faultCode && ` (${charger.faultCode})`}
                     </div>
                     {charger.connectedVehicle && (
-                      <div className="text-slate-600 mt-1">
+                      <div className="opacity-80 mt-1">
                         Connected: {charger.connectedVehicle}
+                      </div>
+                    )}
+                    {charger.status === 'Active' && (
+                      <div className="text-xs opacity-60 mt-2">
+                        {Math.round(charger.powerDelivery)}kW · {Math.round(charger.sessionEnergy * 10) / 10} kWh
                       </div>
                     )}
                   </div>
@@ -306,22 +311,22 @@ export function MapView() {
                 position={[vehicle.lat, vehicle.lng]}
                 icon={createVehicleIcon(vehicle.status, vehicle.soc, vehicle.requiredSoC)}
               >
-                <Popup>
+                <Popup className="dark-popup">
                   <div className="font-sans text-sm min-w-[150px]">
-                    <div className="font-bold text-slate-900">{vehicle.id}</div>
-                    <div className="text-slate-600">{vehicle.model}</div>
+                    <div className="font-bold">{vehicle.id}</div>
+                    <div className="opacity-70">{vehicle.model}</div>
                     <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                      <div className="text-slate-500">SoC:</div>
+                      <div className="opacity-60">SoC:</div>
                       <div className={clsx(
                         'font-medium',
-                        vehicle.soc >= vehicle.requiredSoC ? 'text-green-600' : 'text-red-600'
+                        vehicle.soc >= vehicle.requiredSoC ? 'text-emerald-500' : 'text-red-500'
                       )}>
-                        {vehicle.soc}%
+                        {Math.round(vehicle.soc)}%
                       </div>
-                      <div className="text-slate-500">Status:</div>
-                      <div className="font-medium text-slate-900">{vehicle.status}</div>
-                      <div className="text-slate-500">Driver:</div>
-                      <div className="text-slate-900">{vehicle.driverScore}/100</div>
+                      <div className="opacity-60">Status:</div>
+                      <div className="font-medium">{vehicle.status}</div>
+                      <div className="opacity-60">Driver:</div>
+                      <div>{vehicle.driverScore}/100</div>
                     </div>
                   </div>
                 </Popup>

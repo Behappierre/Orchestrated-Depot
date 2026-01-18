@@ -142,8 +142,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
         // Move along route
         updated.progress = ((vehicle.progress || 0) + 0.02 * state.simulationSpeed) % 1;
 
-        // Drain SoC
-        updated.soc = Math.max(0, vehicle.soc - 0.05 * state.simulationSpeed);
+        // Drain SoC (rounded to 1 decimal)
+        updated.soc = Math.round(Math.max(0, vehicle.soc - 0.05 * state.simulationSpeed) * 10) / 10;
 
         // Update position based on route
         const route = state.routes.find((r) => r.name === vehicle.route);
@@ -166,9 +166,9 @@ export const useAppStore = create<AppStore>((set, get) => ({
         if (charger && charger.status === 'Active') {
           // Charging rate depends on power and battery capacity (assume 300kWh battery)
           const chargeRate = (charger.power / 300) * 100 * (1 / 60) * state.simulationSpeed;
-          updated.soc = Math.min(100, vehicle.soc + chargeRate);
-          updated.chargingTimeRemaining = Math.max(0, ((vehicle.targetSoC - updated.soc) / chargeRate) * state.simulationSpeed);
-          updated.predictedSoCAtDeparture = Math.min(100, updated.soc + chargeRate * (updated.chargingTimeRemaining || 0));
+          updated.soc = Math.round(Math.min(100, vehicle.soc + chargeRate) * 10) / 10;
+          updated.chargingTimeRemaining = Math.round(Math.max(0, ((vehicle.targetSoC - updated.soc) / chargeRate) * state.simulationSpeed));
+          updated.predictedSoCAtDeparture = Math.round(Math.min(100, updated.soc + chargeRate * (updated.chargingTimeRemaining || 0)));
         }
       }
 
@@ -183,10 +183,10 @@ export const useAppStore = create<AppStore>((set, get) => ({
       if (charger.status === 'Active' && charger.connectedVehicle) {
         return {
           ...charger,
-          current: charger.power > 100 ? 180 + Math.random() * 20 : 100 + Math.random() * 20,
-          voltage: charger.power > 100 ? 740 + Math.random() * 20 : 395 + Math.random() * 10,
-          powerDelivery: charger.power * (0.9 + Math.random() * 0.1),
-          sessionEnergy: charger.sessionEnergy + (charger.power / 60) * state.simulationSpeed,
+          current: Math.round(charger.power > 100 ? 180 + Math.random() * 20 : 100 + Math.random() * 20),
+          voltage: Math.round(charger.power > 100 ? 740 + Math.random() * 20 : 395 + Math.random() * 10),
+          powerDelivery: Math.round(charger.power * (0.9 + Math.random() * 0.1)),
+          sessionEnergy: Math.round((charger.sessionEnergy + (charger.power / 60) * state.simulationSpeed) * 10) / 10,
         };
       }
       return charger;
