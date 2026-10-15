@@ -15,6 +15,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { clsx } from 'clsx';
+import { activeDemoProfile } from '../../config/demoProfile';
 
 interface GuideSection {
   id: string;
@@ -37,6 +38,24 @@ export function GuideView() {
             This demo showcases the <strong>Orchestrated Depot</strong> concept—a digital control
             tower that unifies fragmented operational systems into a single intelligent layer.
           </p>
+          {activeDemoProfile.id === 'translink' ? <>
+          <p>
+            The map uses approximate locations for Belfast's Milewater Service Centre,
+            Falls Road and Short Strand depots. Vehicles, chargers, routes, schedules,
+            integration indicators and performance figures are illustrative simulation data,
+            rather than live Translink operations. Route traces are schematic.
+          </p>
+          <div className="bg-blue-500/10 p-4 rounded-lg border border-blue-500/30">
+            <h4 className="font-semibold text-blue-300 mb-2">Start with the controller decision</h4>
+            <p className="text-sm text-slate-300">Open Control decisions. Compare a 15-minute delay that fits within layover with the same delay when recovery time is insufficient. Review the evidence, explain the recommendation, choose an option and approve the simulated plan. Use the decision record to discuss consistency and accountability.</p>
+            <p className="text-sm text-slate-400 mt-2">Then use the Belfast map, fleet and energy screens as supporting context. The older Scenario Playback screen is a narrative walkthrough, not an operational event engine.</p>
+          </div>
+          </> : <p>
+            The general demonstration uses simulated London depots, vehicles, chargers,
+            routes and operating figures. Feed indicators are illustrative; no live
+            operational systems are connected. Open the Translink demo for the separate
+            Belfast service-control workshop example.
+          </p>}
 
           <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
             <h4 className="font-semibold text-white mb-2">The Core Problem</h4>
@@ -52,7 +71,7 @@ export function GuideView() {
             <ul className="text-sm text-slate-300 space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-blue-400 mt-1">1.</span>
-                <span><strong>Specialist Systems Layer:</strong> Existing tools (Optibus, ViriCiti, ChargePoint) continue doing what they do best</span>
+                <span><strong>Specialist Systems Layer:</strong> Existing AVL, scheduling and charging tools continue doing what they do best</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-400 mt-1">2.</span>
@@ -64,11 +83,11 @@ export function GuideView() {
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/30">
               <h5 className="font-medium text-emerald-400 text-sm mb-1">Key Outcome</h5>
-              <p className="text-xs text-slate-400">Morning pull-out guarantee with 15-25% energy cost reduction</p>
+              <p className="text-xs text-slate-400">Targets to validate: reliable pull-out, consistent controller decisions and measured operating-cost improvement</p>
             </div>
             <div className="bg-amber-500/10 p-3 rounded-lg border border-amber-500/30">
               <h5 className="font-medium text-amber-400 text-sm mb-1">Human-in-the-Loop</h5>
-              <p className="text-xs text-slate-400">Auto-execute, Approve-before-execute, or Escalate based on risk</p>
+              <p className="text-xs text-slate-400">Explain alternatives, record the controller's approval and escalate when evidence is insufficient</p>
             </div>
           </div>
         </div>

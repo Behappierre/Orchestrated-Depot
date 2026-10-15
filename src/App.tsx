@@ -8,6 +8,7 @@ import { FleetView } from './components/fleet/FleetView';
 import { EnergyView } from './components/energy/EnergyView';
 import { ScenarioView } from './components/scenarios/ScenarioView';
 import { GuideView } from './components/guide/GuideView';
+import { ControlView } from './components/control/ControlView';
 import { clsx } from 'clsx';
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
 
   const renderView = () => {
     switch (currentView) {
+      case 'control':
+        return <ControlView />;
       case 'dashboard':
         return <DashboardView />;
       case 'map':
@@ -58,7 +61,7 @@ function App() {
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-auto p-4">
+        <main className="relative z-0 isolate flex-1 overflow-auto p-4">
           {renderView()}
         </main>
       </div>

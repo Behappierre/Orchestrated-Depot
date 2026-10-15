@@ -1,12 +1,10 @@
 import type { Depot } from '../types';
+import { belfastDepots } from './belfast';
 
 export const mockDepots: Depot[] = [
   {
     id: 'central',
-    name: 'Central Depot',
-    location: "King's Cross, London",
-    lat: 51.532,
-    lng: -0.124,
+    ...belfastDepots.central,
     maxCapacity: 2.4, // MW
     currentLoad: 850, // kW
     constraints: [
@@ -24,10 +22,7 @@ export const mockDepots: Depot[] = [
   },
   {
     id: 'north',
-    name: 'North Depot',
-    location: 'Finsbury Park, London',
-    lat: 51.564,
-    lng: -0.106,
+    ...belfastDepots.north,
     maxCapacity: 1.8, // MW
     currentLoad: 620, // kW
     constraints: [
@@ -45,10 +40,7 @@ export const mockDepots: Depot[] = [
   },
   {
     id: 'east',
-    name: 'East Depot',
-    location: 'Stratford, London',
-    lat: 51.543,
-    lng: -0.009,
+    ...belfastDepots.east,
     maxCapacity: 1.2, // MW
     currentLoad: 380, // kW
     constraints: [
