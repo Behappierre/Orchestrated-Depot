@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 import { clsx } from 'clsx';
+import { activeDemoProfile } from '../../config/demoProfile';
 
 const viewTitles: Record<string, string> = {
   control: 'Service Control Decisions',
@@ -104,8 +105,8 @@ export function Header() {
 
       <div className="flex-1 min-w-0 overflow-hidden mx-2 text-xs text-slate-400">
         <span className="block truncate">{currentView === 'control'
-          ? 'Same inputs. Consistent rules. Controller decides.'
-          : 'Belfast operational simulation · illustrative data'}</span>
+          ? 'Translink · consistent decisions, controller approval'
+          : `${activeDemoProfile.label} · illustrative data`}</span>
       </div>
 
       {/* System Status Indicators */}

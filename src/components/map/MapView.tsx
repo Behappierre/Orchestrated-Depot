@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Polygon, CircleMarker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppStore } from '../../stores/useAppStore';
-import { belfastCenter, belfastDepots } from '../../data/belfast';
+import { demoData, demoMapCenter } from '../../data/demoData';
+import { activeDemoProfile } from '../../config/demoProfile';
 import { clsx } from 'clsx';
 import {
   Layers,
@@ -95,14 +96,14 @@ function MapControls({ lat, lng }: { lat: number; lng: number }) {
   }, [map, lat, lng]);
 
   const showNetwork = () => {
-    map.fitBounds(Object.values(belfastDepots).map((depot) => [depot.lat, depot.lng]), {
+    map.fitBounds(demoData.depots.map((depot) => [depot.lat, depot.lng]), {
       paddingTopLeft: [240, 65], paddingBottomRight: [70, 65], maxZoom: 14,
     });
   };
 
-  // Start with the Belfast network visible, then follow the depot selector.
+  // Start with the selected demo network visible, then follow the depot selector.
   useEffect(() => {
-    map.fitBounds(Object.values(belfastDepots).map((depot) => [depot.lat, depot.lng]), {
+    map.fitBounds(demoData.depots.map((depot) => [depot.lat, depot.lng]), {
       paddingTopLeft: [240, 65], paddingBottomRight: [70, 65], maxZoom: 14,
     });
   }, [map]);
@@ -132,8 +133,8 @@ function MapControls({ lat, lng }: { lat: number; lng: number }) {
       </button>
       <button
         onClick={showNetwork}
-        aria-label="Show all Belfast depots"
-        title="Show all Belfast depots"
+        aria-label={activeDemoProfile.networkControlLabel}
+        title={activeDemoProfile.networkControlLabel}
         className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-white hover:bg-slate-700 transition-colors shadow-lg"
       >
         <Layers className="w-5 h-5" />
@@ -206,7 +207,7 @@ export function MapView() {
         </div>
 
         <p className="text-xs text-slate-400 mt-3 max-w-[185px]">
-          Belfast demo · simulated fleet and chargers at approximate depot locations
+          {activeDemoProfile.mapDescription}
         </p>
 
         {/* Status Legend */}
@@ -250,7 +251,7 @@ export function MapView() {
 
       {/* Map */}
       <MapContainer
-        center={belfastCenter}
+        center={demoMapCenter}
         zoom={14}
         maxZoom={19}
         className="h-full w-full"
@@ -263,8 +264,8 @@ export function MapView() {
         />
 
         <MapControls
-          lat={selectedDepot?.lat ?? belfastCenter[0]}
-          lng={selectedDepot?.lng ?? belfastCenter[1]}
+          lat={selectedDepot?.lat ?? demoMapCenter[0]}
+          lng={selectedDepot?.lng ?? demoMapCenter[1]}
         />
 
         {/* Depot Zone */}
@@ -298,7 +299,7 @@ export function MapView() {
           </CircleMarker>
         ))}
 
-        {/* Illustrative Belfast routes */}
+        {/* Illustrative routes for this demo profile */}
         {showRoutes &&
           routes.map((route) => (
             <Polyline

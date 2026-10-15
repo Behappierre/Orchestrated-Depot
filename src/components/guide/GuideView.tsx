@@ -15,6 +15,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { clsx } from 'clsx';
+import { activeDemoProfile } from '../../config/demoProfile';
 
 interface GuideSection {
   id: string;
@@ -37,6 +38,7 @@ export function GuideView() {
             This demo showcases the <strong>Orchestrated Depot</strong> concept—a digital control
             tower that unifies fragmented operational systems into a single intelligent layer.
           </p>
+          {activeDemoProfile.id === 'translink' ? <>
           <p>
             The map uses approximate locations for Belfast's Milewater Service Centre,
             Falls Road and Short Strand depots. Vehicles, chargers, routes, schedules,
@@ -48,6 +50,12 @@ export function GuideView() {
             <p className="text-sm text-slate-300">Open Control decisions. Compare a 15-minute delay that fits within layover with the same delay when recovery time is insufficient. Review the evidence, explain the recommendation, choose an option and approve the simulated plan. Use the decision record to discuss consistency and accountability.</p>
             <p className="text-sm text-slate-400 mt-2">Then use the Belfast map, fleet and energy screens as supporting context. The older Scenario Playback screen is a narrative walkthrough, not an operational event engine.</p>
           </div>
+          </> : <p>
+            The general demonstration uses simulated London depots, vehicles, chargers,
+            routes and operating figures. Feed indicators are illustrative; no live
+            operational systems are connected. Open the Translink demo for the separate
+            Belfast service-control workshop example.
+          </p>}
 
           <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
             <h4 className="font-semibold text-white mb-2">The Core Problem</h4>

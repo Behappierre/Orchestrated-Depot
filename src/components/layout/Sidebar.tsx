@@ -7,10 +7,12 @@ import {
   Layers,
   BookOpen,
   GitPullRequestArrow,
+  ArrowUpRight,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 import type { ViewType } from '../../types';
 import { clsx } from 'clsx';
+import { activeDemoProfile } from '../../config/demoProfile';
 
 const navItems: { id: ViewType; icon: typeof LayoutDashboard; label: string }[] = [
   { id: 'control', icon: GitPullRequestArrow, label: 'Control decisions' },
@@ -35,7 +37,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <ul className="flex-1 flex flex-col gap-2">
-        {navItems.map((item) => {
+        {navItems.filter(item => item.id !== 'control' || activeDemoProfile.id === 'translink').map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
 
@@ -72,6 +74,11 @@ export function Sidebar() {
 
       {/* Bottom spacer */}
       <div className="mt-auto pt-4 border-t border-slate-800">
+        <a
+          href={activeDemoProfile.id === 'translink' ? '/' : '/Translink'}
+          title={activeDemoProfile.id === 'translink' ? 'Open general depot demo' : 'Open Translink demo'}
+          className="flex items-center justify-center w-8 h-8 mb-3 text-slate-400 hover:text-blue-300"
+        ><ArrowUpRight className="w-4 h-4" /></a>
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center text-xs font-bold text-slate-900">
           NC
         </div>

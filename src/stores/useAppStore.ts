@@ -1,10 +1,9 @@
 import { create } from 'zustand';
 import type { ViewType, Vehicle, Charger, Depot, ScheduledDuty, Alert, Route, Scenario, EnergyTariff } from '../types';
-import { mockVehicles } from '../data/mockFleet';
+import { demoData } from '../data/demoData';
+import { activeDemoProfile } from '../config/demoProfile';
 import { mockChargers } from '../data/mockChargers';
-import { mockDepots } from '../data/mockDepots';
 import { mockSchedule } from '../data/mockSchedule';
-import { mockRoutes } from '../data/mockRoutes';
 import { mockTariff } from '../data/mockTariff';
 import { scenarios } from '../data/scenarios';
 import { runOrchestration } from '../services/orchestrationEngine';
@@ -83,16 +82,16 @@ const getInitialSimTime = () => {
 
 export const useAppStore = create<AppStore>((set, get) => ({
   // Initial state
-  currentView: 'control',
+  currentView: activeDemoProfile.initialView,
   isDarkMode: true,
   selectedDepotId: 'central',
 
   // Data
-  vehicles: mockVehicles,
+  vehicles: demoData.vehicles,
   chargers: mockChargers,
-  depots: mockDepots,
+  depots: demoData.depots,
   schedule: mockSchedule,
-  routes: mockRoutes,
+  routes: demoData.routes,
   alerts: [],
   tariff: mockTariff,
 

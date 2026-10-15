@@ -1,12 +1,27 @@
 # Orchestrated Depot demo
 
-A browser simulation of electric bus depot operations, set in Belfast.
+A browser simulation of electric bus operations with two URL-based demo profiles.
 
 Run `npm ci`, then `npm run dev`. `npm run build` creates the production site in `dist`.
 
+## Demo URLs
+
+- `/` opens the general depot dashboard using the original simulated London data.
+- `/Translink` opens the Belfast service-control workshop demo.
+- `/Translink/` and lowercase `/translink` also open the Belfast profile.
+
+On production, use `https://depot-orch.netlify.app/Translink` for the workshop.
+On a Deploy Preview, add `/Translink` to the preview hostname. The sidebar's arrow link
+opens the other demo with a full navigation and fresh in-memory state. The variants share
+components and fixes, but have separate starting views, titles, fleet positions, depots
+and route data. There is no shared persistent operational data.
+
+`netlify.toml` supplies the SPA rewrite for direct visits and refreshes. Vite emits
+root-relative asset URLs so scripts/styles also load under `/Translink/`.
+
 ## Controller decision example
 
-The opening view compares the same 15-minute inbound delay against 22 or 12 minutes
+The Translink opening view compares the same 15-minute inbound delay against 22 or 12 minutes
 of planned layover, protecting an illustrative seven-minute minimum turnaround.
 The recommendation changes from monitoring natural recovery to proposing a confirmed
 reserve. Removing reserve confirmation requires regulation review; unconfirmed source
@@ -23,7 +38,7 @@ Run `npm test` with Node 22.6 or newer to verify the decision rules and approval
 
 ## Map
 
-The initial map shows Milewater Service Centre, Falls Road Depot and Short Strand Depot.
+The Translink map shows Milewater Service Centre, Falls Road Depot and Short Strand Depot.
 Selecting a depot centres the map on it. The layers button in the map controls restores
 the view of all three Belfast sites. Buses and chargers remain visible across the network;
 the statistics panel describes the depot selected in the header.
