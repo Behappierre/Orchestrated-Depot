@@ -12,6 +12,7 @@ import { useAppStore } from '../../stores/useAppStore';
 import { clsx } from 'clsx';
 
 const viewTitles: Record<string, string> = {
+  control: 'Service Control Decisions',
   dashboard: 'Orchestrated Depot Overview',
   map: 'Live Network Control',
   fleet: 'Fleet Operations',
@@ -21,10 +22,7 @@ const viewTitles: Record<string, string> = {
 };
 
 const systemIntegrations = [
-  { name: 'Optibus', status: 'active' },
-  { name: 'ViriCiti', status: 'active' },
-  { name: 'ChargePoint', status: 'active' },
-  { name: 'Grid Sync', status: 'warning' },
+  'AVL', 'Timetable', 'Fleet / charging',
 ];
 
 export function Header() {
@@ -60,26 +58,29 @@ export function Header() {
   });
 
   return (
-    <header className="h-14 bg-slate-900/80 backdrop-blur-sm border-b border-slate-800 flex items-center px-4 gap-4 relative z-50">
+    <header className="h-14 shrink-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 flex items-center px-4 gap-4 relative z-50">
       {/* Title & Location */}
       <div className="flex items-center gap-4">
-        <h1 className="text-lg font-semibold text-white">
+        <h1 className="text-lg font-semibold text-white whitespace-nowrap">
           {viewTitles[currentView] || 'Overview'}
         </h1>
 
         {/* Depot Selector */}
         <div className="relative">
           <button
+            aria-label="Select depot"
+            aria-expanded={showDepotDropdown}
+            aria-controls="depot-menu"
             onClick={() => setShowDepotDropdown(!showDepotDropdown)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-sm"
           >
             <MapPin className="w-4 h-4 text-blue-400" />
-            <span>{selectedDepot?.name || 'Select Depot'}</span>
+            <span className="whitespace-nowrap">{selectedDepot?.name || 'Select Depot'}</span>
             <ChevronDown className="w-4 h-4 text-slate-400" />
           </button>
 
           {showDepotDropdown && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-[100] overflow-hidden">
+            <div id="depot-menu" className="absolute top-full left-0 mt-1 w-72 bg-slate-800 border border-slate-600 rounded-lg shadow-2xl z-[100] overflow-hidden" onKeyDown={(event) => { if (event.key === 'Escape') setShowDepotDropdown(false); }}>
               {depots.map((depot) => (
                 <button
                   key={depot.id}
@@ -101,50 +102,33 @@ export function Header() {
         </div>
       </div>
 
-      {/* Live Ticker */}
-      <div className="flex-1 overflow-hidden mx-4">
-        <div className="ticker-container h-6 flex items-center">
-          <div className="ticker-content text-xs text-slate-400">
-            <span className="mx-4">SYSTEM STATUS: OPTIMAL</span>
-            <span className="mx-4 text-emerald-400">GRID LOAD: 45% STABLE</span>
-            <span className="mx-4">WEATHER: 8°C CLOUDY</span>
-            <span className="mx-4">SHIFT SUPERVISOR: D. ADAMS</span>
-            <span className="mx-4 text-blue-400">NEXT PULL-OUT: {alerts.length > 0 ? 'BUS-101 06:15' : '15 MINS'}</span>
-            <span className="mx-4 text-emerald-400">SAFETY INCIDENT FREE: 142 DAYS</span>
-            {/* Duplicate for seamless loop */}
-            <span className="mx-4">SYSTEM STATUS: OPTIMAL</span>
-            <span className="mx-4 text-emerald-400">GRID LOAD: 45% STABLE</span>
-            <span className="mx-4">WEATHER: 8°C CLOUDY</span>
-            <span className="mx-4">SHIFT SUPERVISOR: D. ADAMS</span>
-            <span className="mx-4 text-blue-400">NEXT PULL-OUT: {alerts.length > 0 ? 'BUS-101 06:15' : '15 MINS'}</span>
-            <span className="mx-4 text-emerald-400">SAFETY INCIDENT FREE: 142 DAYS</span>
-          </div>
-        </div>
+      <div className="flex-1 min-w-0 overflow-hidden mx-2 text-xs text-slate-400">
+        <span className="block truncate">{currentView === 'control'
+          ? 'Same inputs. Consistent rules. Controller decides.'
+          : 'Belfast operational simulation · illustrative data'}</span>
       </div>
 
       {/* System Status Indicators */}
       <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-800/50">
+        <span className="text-[10px] uppercase text-slate-500 whitespace-nowrap">Demo feeds</span>
         {systemIntegrations.map((sys) => (
           <div
-            key={sys.name}
+            key={sys}
             className="flex items-center gap-1.5 text-xs"
-            title={`${sys.name}: ${sys.status}`}
+            title={`${sys}: illustrative data, no live connection`}
           >
             <span
-              className={clsx(
-                'w-1.5 h-1.5 rounded-full',
-                sys.status === 'active' && 'bg-emerald-400 shadow-glow-success',
-                sys.status === 'warning' && 'bg-amber-400 shadow-glow-warning',
-                sys.status === 'error' && 'bg-red-400 shadow-glow-danger'
-              )}
+              className="w-1.5 h-1.5 rounded-full bg-blue-400"
             />
-            <span className="text-slate-400">{sys.name}</span>
+            <span className="text-slate-400 whitespace-nowrap">{sys}</span>
           </div>
         ))}
       </div>
 
       {/* Simulation Controls */}
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700">
+      {currentView === 'control' ? (
+        <span className="px-3 py-2 rounded-lg bg-blue-500/10 text-blue-300 text-xs whitespace-nowrap">Worked example</span>
+      ) : <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-slate-700">
         <button
           onClick={toggleSimulation}
           className={clsx(
@@ -177,7 +161,7 @@ export function Header() {
           <div className="font-mono text-sm font-semibold text-white">{timeString}</div>
           <div className="text-[10px] text-slate-500 leading-none">{dateString}</div>
         </div>
-      </div>
+      </div>}
 
       {/* Right Actions */}
       <div className="flex items-center gap-2">

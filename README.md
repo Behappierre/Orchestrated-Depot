@@ -4,6 +4,23 @@ A browser simulation of electric bus depot operations, set in Belfast.
 
 Run `npm ci`, then `npm run dev`. `npm run build` creates the production site in `dist`.
 
+## Controller decision example
+
+The opening view compares the same 15-minute inbound delay against 22 or 12 minutes
+of planned layover, protecting an illustrative seven-minute minimum turnaround.
+The recommendation changes from monitoring natural recovery to proposing a confirmed
+reserve. Removing reserve confirmation requires regulation review; unconfirmed source
+data blocks approval. Alternatives require a recorded reason. Approvals create a
+session-only decision record and simulated hand-off acknowledgements, retained across
+navigation. No commands are sent to external systems.
+
+Rules, timings and readiness assumptions require operator validation. There is no
+passenger-impact model or live integration, and no operational benefit is claimed as
+measured. The older depot simulation starts paused. The older scenario screen remains
+a narrative walkthrough.
+
+Run `npm test` with Node 22.6 or newer to verify the decision rules and approval guards.
+
 ## Map
 
 The initial map shows Milewater Service Centre, Falls Road Depot and Short Strand Depot.

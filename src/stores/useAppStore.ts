@@ -83,7 +83,7 @@ const getInitialSimTime = () => {
 
 export const useAppStore = create<AppStore>((set, get) => ({
   // Initial state
-  currentView: 'dashboard',
+  currentView: 'control',
   isDarkMode: true,
   selectedDepotId: 'central',
 
@@ -99,7 +99,7 @@ export const useAppStore = create<AppStore>((set, get) => ({
   // Simulation
   simulationTime: getInitialSimTime(),
   simulationSpeed: 1,
-  isSimulationRunning: true,
+  isSimulationRunning: false,
 
   // Scenario
   activeScenario: null,

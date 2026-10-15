@@ -6,12 +6,14 @@ import {
   Play,
   Layers,
   BookOpen,
+  GitPullRequestArrow,
 } from 'lucide-react';
 import { useAppStore } from '../../stores/useAppStore';
 import type { ViewType } from '../../types';
 import { clsx } from 'clsx';
 
 const navItems: { id: ViewType; icon: typeof LayoutDashboard; label: string }[] = [
+  { id: 'control', icon: GitPullRequestArrow, label: 'Control decisions' },
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { id: 'map', icon: Map, label: 'Map' },
   { id: 'fleet', icon: Bus, label: 'Fleet' },
