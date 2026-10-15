@@ -37,7 +37,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <ul className="flex-1 flex flex-col gap-2">
-        {navItems.filter(item => item.id !== 'control' || activeDemoProfile.id === 'translink').map((item) => {
+        {navItems.filter(item => (item.id !== 'control' || activeDemoProfile.id === 'translink') && (item.id !== 'scenarios' || activeDemoProfile.id !== 'translink')).map((item) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
 
@@ -52,6 +52,7 @@ export function Sidebar() {
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
                 )}
                 title={item.label}
+                aria-label={item.label}
               >
                 <Icon className="w-5 h-5" />
 

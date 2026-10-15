@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { useAppStore } from '../../stores/useAppStore';
 import { demoData, demoMapCenter } from '../../data/demoData';
 import { activeDemoProfile } from '../../config/demoProfile';
+import publicContext from '../../data/publicContext.json';
 import { clsx } from 'clsx';
 import {
   Layers,
@@ -89,6 +90,7 @@ const createChargerIcon = (status: string) => {
 // Map controls component
 function MapControls({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
+  const { highlightedVehicleIds, vehicles } = useAppStore();
 
   // MapContainer only uses its initial center; follow subsequent depot selections.
   useEffect(() => {
@@ -107,6 +109,11 @@ function MapControls({ lat, lng }: { lat: number; lng: number }) {
       paddingTopLeft: [240, 65], paddingBottomRight: [70, 65], maxZoom: 14,
     });
   }, [map]);
+
+  useEffect(() => {
+    const affected = vehicles.filter(v => highlightedVehicleIds.includes(v.id));
+    if (affected.length) map.fitBounds(affected.map(v => [v.lat, v.lng] as [number, number]), { paddingTopLeft: [270, 80], paddingBottomRight: [80, 80], maxZoom: 17 });
+  }, [map, highlightedVehicleIds, vehicles]);
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
@@ -144,10 +151,12 @@ function MapControls({ lat, lng }: { lat: number; lng: number }) {
 }
 
 export function MapView() {
-  const { vehicles, chargers, routes, depots, selectedDepotId } = useAppStore();
+  const { vehicles, chargers, routes, depots, selectedDepotId, highlightedVehicleIds } = useAppStore();
   const [showRoutes, setShowRoutes] = useState(true);
   const [showChargers, setShowChargers] = useState(true);
   const [showVehicles, setShowVehicles] = useState(true);
+  const [showStops, setShowStops] = useState(false);
+  const [showPublicRoutes, setShowPublicRoutes] = useState(false);
 
   const selectedDepot = depots.find((d) => d.id === selectedDepotId);
   const depotVehicles = vehicles.filter((v) => v.depotId === selectedDepotId);
@@ -168,7 +177,7 @@ export function MapView() {
   return (
     <div className="h-full relative rounded-xl overflow-hidden">
       {/* Legend Panel */}
-      <div className="absolute top-4 left-4 z-[1000] bg-slate-900/95 backdrop-blur-sm rounded-xl border border-slate-700 p-4 shadow-xl">
+      <div className="absolute top-4 left-4 z-[1000] max-h-[calc(100%-2rem)] overflow-y-auto bg-slate-900/95 backdrop-blur-sm rounded-xl border border-slate-700 p-4 shadow-xl">
         <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
           <Layers className="w-4 h-4 text-blue-400" />
           Map Layers
@@ -209,6 +218,12 @@ export function MapView() {
         <p className="text-xs text-slate-400 mt-3 max-w-[185px]">
           {activeDemoProfile.mapDescription}
         </p>
+        {activeDemoProfile.id === 'translink' && <div className="text-xs text-slate-300 mt-3 space-y-2 max-w-[210px]">
+          <label className="flex gap-2"><input type="checkbox" checked={showStops} onChange={e => setShowStops(e.target.checked)} />Public stop records ({publicContext.stops.length}) · Oct 2026</label>
+          <label className="flex gap-2"><input type="checkbox" checked={showPublicRoutes} onChange={e => { setShowPublicRoutes(e.target.checked); if (e.target.checked) setShowRoutes(false); }} />Published G1 / G2 / 10A · Sep 2025</label>
+          <p className="text-slate-500">Translink · Open Government Licence v3.0. Public geography; simulated operations.</p>
+          {highlightedVehicleIds.length > 0 && <p className="text-amber-300">Approved decision: {highlightedVehicleIds.join(' → ')}. Amber rings mark affected buses.</p>}
+        </div>}
 
         {/* Status Legend */}
         <div className="mt-4 pt-4 border-t border-slate-700">
@@ -231,7 +246,7 @@ export function MapView() {
       </div>
 
       {/* Stats Panel */}
-      <div className="absolute bottom-4 left-4 z-[1000] bg-slate-900/95 backdrop-blur-sm rounded-xl border border-slate-700 p-4 shadow-xl">
+      <div className="absolute bottom-4 right-4 z-[1000] bg-slate-900/95 backdrop-blur-sm rounded-xl border border-slate-700 p-4 shadow-xl">
         <div className="text-sm font-medium text-white mb-2">{selectedDepot?.name}</div>
         <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-xs">
           <div className="text-slate-400">On Route:</div>
@@ -267,6 +282,9 @@ export function MapView() {
           lat={selectedDepot?.lat ?? demoMapCenter[0]}
           lng={selectedDepot?.lng ?? demoMapCenter[1]}
         />
+        {activeDemoProfile.id === 'translink' && showPublicRoutes && publicContext.routes.map(route => <Polyline key={route.id} positions={route.segments as [number, number][][]} pathOptions={{ color: route.color, weight: 4, opacity: 0.8 }}><Tooltip>{route.name} · published geometry, 23 September 2025 · may include variants</Tooltip></Polyline>)}
+        {activeDemoProfile.id === 'translink' && showStops && publicContext.stops.map(stop => <CircleMarker key={stop.id} center={[stop.lat, stop.lng]} radius={4} pathOptions={{ color: '#67e8f9', weight: 1, fillOpacity: 0.7 }}><Popup><strong>{stop.name}</strong><br />Stop record {stop.id}<br />Translink catalogue · 2 October 2026<br />May be a real or virtual stop</Popup></CircleMarker>)}
+        {vehicles.filter(v => highlightedVehicleIds.includes(v.id)).map(v => <CircleMarker key={`selected-${v.id}`} center={[v.lat, v.lng]} radius={22} pathOptions={{ color: '#fbbf24', weight: 4, fillOpacity: 0 }}><Tooltip permanent direction="right" offset={[24, 0]}>{v.id} · {v.assignedDuty ?? 'Recovering / unassigned'}</Tooltip></CircleMarker>)}
 
         {/* Depot Zone */}
         {depotZone.length > 0 && (
@@ -367,11 +385,13 @@ export function MapView() {
                 key={vehicle.id}
                 position={[vehicle.lat, vehicle.lng]}
                 icon={createVehicleIcon(vehicle.status, vehicle.soc, vehicle.requiredSoC)}
-                zIndexOffset={200}
+                zIndexOffset={highlightedVehicleIds.includes(vehicle.id) ? 1500 : 200}
+                opacity={highlightedVehicleIds.length > 0 && !highlightedVehicleIds.includes(vehicle.id) ? 0.35 : 1}
               >
                 <Popup className="dark-popup">
                   <div className="font-sans text-sm min-w-[150px]">
                     <div className="font-bold">{vehicle.id}</div>
+                    <div className="text-xs">Duty: {vehicle.assignedDuty ?? 'Unassigned'}<br />{vehicle.location}</div>
                     <div className="opacity-70">{vehicle.model}</div>
                     <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
                       <div className="opacity-60">SoC:</div>

@@ -1,6 +1,9 @@
 [build]
-  command = "npm run build"
+  command = "npm test && npm run build"
   publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
 
 # Serve the application on direct visits and refreshes at /Translink or /Translink/.
 # Existing asset files retain Netlify's normal file-serving precedence.

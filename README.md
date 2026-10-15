@@ -25,16 +25,55 @@ The Translink opening view compares the same 15-minute inbound delay against 22 
 of planned layover, protecting an illustrative seven-minute minimum turnaround.
 The recommendation changes from monitoring natural recovery to proposing a confirmed
 reserve. Removing reserve confirmation requires regulation review; unconfirmed source
-data blocks approval. Alternatives require a recorded reason. Approvals create a
-session-only decision record and simulated hand-off acknowledgements, retained across
-navigation. No commands are sent to external systems.
+data blocks approval. Alternatives require a recorded reason. Approvals update the
+simulated vehicle/duty assignment or departure time, pause the clock, and create a
+session-only decision record. A reserve is rechecked against the current fleet and
+all active duties at approval, preventing double booking. The affected buses can be
+highlighted on the map. No commands are sent to external systems.
 
 Rules, timings and readiness assumptions require operator validation. There is no
-passenger-impact model or live integration, and no operational benefit is claimed as
-measured. The older depot simulation starts paused. The older scenario screen remains
-a narrative walkthrough.
+validated passenger-impact model or live integration, and no operational benefit is
+claimed as measured. A third example compares immediate departure with a headway hold:
+3/17-minute gaps become 10/10 with a seven-minute hold, subject to illustrative driver
+relief slack. It displays on-board passenger-minutes added; waiting demand is context,
+not a quantified benefit. The permitted control point and following-bus arrival are
+assumptions, not inferred from public route data.
+
+The Belfast fixture is seeded and starts at 05:30 on Monday 19 October 2026. **Reset
+whole demo** restores vehicles, duties, chargers, depot loads, alerts, clock, speed,
+map highlights and decisions. Changing worked example also resets those states. The
+depot selection is retained. The legacy narrative scenario screen and unimplemented
+legacy alert actions are excluded from `/Translink`; legacy depot alerts remain
+read-only context. General-demo actions also reject occupied reserve vehicles.
 
 Run `npm test` with Node 22.6 or newer to verify the decision rules and approval guards.
+Netlify runs these checks before every build. `npm run lint` remains unavailable because
+the repository has no ESLint flat config; the production TypeScript build is checked.
+
+## Published Belfast context
+
+The optional public map layers contain 332 central Belfast stop records and selected
+G1, G2 and 10A route links. These are public snapshots, separate from the synthetic
+fleet, duty and crew data. Stop records include real and virtual points; the selected
+bounding box is not a complete Belfast network. Route links can include variants.
+
+- [Stop catalogue](https://www.data.gov.uk/dataset/495c6964-e8d2-4bf1-9942-8d950b3a0ceb/translink-bus-stop-list): resource labelled valid 2 October 2026, filename `bus-stop-export-20260923.xlsx`.
+- [Route geography](https://www.data.gov.uk/dataset/6f40b323-1933-40db-97f2-835382029a1f/translink-metro-bus-routes): MapInfo WGS84 snapshot 23 September 2025.
+- [DfI statistics](https://www.infrastructure-ni.gov.uk/news/public-transport-statistics-northern-ireland-2024-25-statistical-report-has-been-published-today): 2024–25 Northern Ireland bus context, with fleet figures dated March 2025. Not current or Metro-only fleet data.
+
+Contains Translink data licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+`src/data/publicContext.json` records source URLs, dates, input SHA-256 hashes, original
+record count, selection boundaries and attribution. Rebuild with
+`python scripts/import-public-context.py /path/to/downloaded-snapshots` (requires
+openpyxl; files named `stops.xlsx` and `routes.zip`). The files are official catalogue
+downloads, not API responses. No runtime stop/route API requests are required; the
+OpenStreetMap basemap still needs internet access.
+
+The expanded public-data panel also identifies the published September 2026
+TransXChange timetable export and Translink Transport Information API as future
+integration candidates. Timetable date/day exceptions, trip-to-block matching and
+API usage agreements need validation before integration. Neither source establishes
+vehicle availability, crew relief constraints or passenger occupancy.
 
 ## Map
 

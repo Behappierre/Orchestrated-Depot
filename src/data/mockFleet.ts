@@ -1,3 +1,7 @@
+// Fixed seed makes the workshop repeatable across reloads.
+let randomSeed = 192026;
+function random() { randomSeed = (randomSeed * 1664525 + 1013904223) >>> 0; return randomSeed / 4294967296; }
+
 import type { Vehicle } from '../types';
 import { getDepotPosition } from './belfast';
 
@@ -385,11 +389,11 @@ function generateVehicles(
   const vehicles: Vehicle[] = [];
 
   for (let i = startId; i <= endId; i++) {
-    const modelInfo = models[Math.floor(Math.random() * models.length)];
-    const status = statuses[Math.floor(Math.random() * statuses.length)];
-    const soc = Math.floor(Math.random() * 60) + 40; // 40-100%
-    const soh = Math.floor(Math.random() * 15) + 85; // 85-100%
-    const odometer = Math.floor(Math.random() * 150000);
+    const modelInfo = models[Math.floor(random() * models.length)];
+    const status = statuses[Math.floor(random() * statuses.length)];
+    const soc = Math.floor(random() * 60) + 40; // 40-100%
+    const soh = Math.floor(random() * 15) + 85; // 85-100%
+    const odometer = Math.floor(random() * 150000);
     const cycles = Math.floor(odometer / 150);
 
     vehicles.push({
@@ -398,26 +402,26 @@ function generateVehicles(
       manufacturer: modelInfo.manufacturer,
       depotId,
       soc,
-      requiredSoC: Math.floor(Math.random() * 20) + 75, // 75-95%
+      requiredSoC: Math.floor(random() * 20) + 75, // 75-95%
       targetSoC: 95,
       status,
       chargerId: status === 'Charging' ? `CH-${depotId.charAt(0).toUpperCase()}${String(i).slice(-2)}` : null,
-      location: `Bay ${String.fromCharCode(65 + Math.floor(Math.random() * 4))}${Math.floor(Math.random() * 4) + 1}`,
-      assignedDuty: Math.random() > 0.3 ? `DUTY-${depotId.charAt(0).toUpperCase()}${String(i).slice(-2)}` : null,
+      location: `Bay ${String.fromCharCode(65 + Math.floor(random() * 4))}${Math.floor(random() * 4) + 1}`,
+      assignedDuty: random() > 0.3 ? `DUTY-${depotId.charAt(0).toUpperCase()}${String(i).slice(-2)}` : null,
       ...getDepotPosition(depotId, i - startId + 10),
       soh,
       odometer,
-      efficiency: 1.1 + Math.random() * 0.5,
-      driverScore: Math.floor(Math.random() * 25) + 75,
+      efficiency: 1.1 + random() * 0.5,
+      driverScore: Math.floor(random() * 25) + 75,
       cycles,
-      batteryTemp: Math.floor(Math.random() * 20) + 18,
-      ambientTemp: Math.floor(Math.random() * 5) + 5,
-      hvacLoad: status === 'Driving' ? Math.floor(Math.random() * 10) + 8 : 0,
-      nextService: `${Math.floor(Math.random() * 30) + 1}d`,
-      lastSync: `${Math.floor(Math.random() * 50) + 10}ms`,
-      connectionType: connections[Math.floor(Math.random() * connections.length)],
-      predictedSoCAtDeparture: soc + (status === 'Charging' ? Math.floor(Math.random() * 20) : 0),
-      chargingTimeRemaining: status === 'Charging' ? Math.floor(Math.random() * 60) + 15 : 0,
+      batteryTemp: Math.floor(random() * 20) + 18,
+      ambientTemp: Math.floor(random() * 5) + 5,
+      hvacLoad: status === 'Driving' ? Math.floor(random() * 10) + 8 : 0,
+      nextService: `${Math.floor(random() * 30) + 1}d`,
+      lastSync: `${Math.floor(random() * 50) + 10}ms`,
+      connectionType: connections[Math.floor(random() * connections.length)],
+      predictedSoCAtDeparture: soc + (status === 'Charging' ? Math.floor(random() * 20) : 0),
+      chargingTimeRemaining: status === 'Charging' ? Math.floor(random() * 60) + 15 : 0,
       rangeRemaining: Math.floor(soc * 2.8),
     });
   }
