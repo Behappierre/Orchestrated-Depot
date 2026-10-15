@@ -15,7 +15,7 @@ import { activeDemoProfile } from '../../config/demoProfile';
 const viewTitles: Record<string, string> = {
   control: 'Service Control Decisions',
   dashboard: 'Orchestrated Depot Overview',
-  map: 'Live Network Control',
+  map: activeDemoProfile.id === 'translink' ? 'Belfast Network Context' : 'Live Network Control',
   fleet: 'Fleet Operations',
   energy: 'Energy & Infrastructure',
   scenarios: 'Scenario Playback',
@@ -176,7 +176,8 @@ export function Header() {
 
         <button
           className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-          title="Notifications"
+          title="Open alerts on dashboard"
+          onClick={() => useAppStore.getState().setCurrentView('dashboard')}
         >
           <Bell className="w-5 h-5" />
           {unreadAlerts > 0 && (

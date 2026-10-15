@@ -310,18 +310,15 @@ function findSwapCandidates(
 
       // Must not be assigned to another duty
       if (v.assignedDuty && v.assignedDuty !== duty.id) {
-        // Check if their duty is later
-        const otherDuty = schedule.find((d) => d.id === v.assignedDuty);
-        if (otherDuty && otherDuty.departureTime <= duty.departureTime) {
-          return false;
-        }
+        return false;
       }
 
+      if (schedule.some(d => d.vehicleId === v.id && !['Completed', 'Cancelled'].includes(d.status) && d.id !== duty.id)) return false;
       // Must not be faulted or in maintenance
       if (v.status === 'Faulted' || v.status === 'Maintenance') return false;
 
       // Must not be driving
-      if (v.status === 'Driving') return false;
+      if (v.status !== 'Idle' || v.chargerId) return false;
 
       // Not the same vehicle
       if (v.id === duty.vehicleId) return false;

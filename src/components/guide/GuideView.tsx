@@ -42,13 +42,14 @@ export function GuideView() {
           <p>
             The map uses approximate locations for Belfast's Milewater Service Centre,
             Falls Road and Short Strand depots. Vehicles, chargers, routes, schedules,
-            integration indicators and performance figures are illustrative simulation data,
-            rather than live Translink operations. Route traces are schematic.
+            integration indicators and performance figures are illustrative simulation data.
+            Optional public stop and route layers are sourced snapshots with visible dates;
+            the dashed demo routes remain schematic. No live Translink systems are connected.
           </p>
           <div className="bg-blue-500/10 p-4 rounded-lg border border-blue-500/30">
             <h4 className="font-semibold text-blue-300 mb-2">Start with the controller decision</h4>
             <p className="text-sm text-slate-300">Open Control decisions. Compare a 15-minute delay that fits within layover with the same delay when recovery time is insufficient. Review the evidence, explain the recommendation, choose an option and approve the simulated plan. Use the decision record to discuss consistency and accountability.</p>
-            <p className="text-sm text-slate-400 mt-2">Then use the Belfast map, fleet and energy screens as supporting context. The older Scenario Playback screen is a narrative walkthrough, not an operational event engine.</p>
+            <p className="text-sm text-slate-400 mt-2">Approve reserve cover to update the simulated duty and fleet, then show the affected buses on the Belfast map. The third case compares a headway hold with passenger delay and driver-relief constraints. Reset whole demo restores the same fleet, clock and decisions. Expand Public data for source dates, network context and the operational inputs to validate in the workshop. Legacy playback and unfinished alert actions are excluded from this variant.</p>
           </div>
           </> : <p>
             The general demonstration uses simulated London depots, vehicles, chargers,

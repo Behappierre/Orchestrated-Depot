@@ -1,18 +1,52 @@
-import { useEffect } from 'react';
-import { useAppStore } from './stores/useAppStore';
-import { Sidebar } from './components/layout/Sidebar';
-import { Header } from './components/layout/Header';
-import { DashboardView } from './components/dashboard/DashboardView';
-import { MapView } from './components/map/MapView';
-import { FleetView } from './components/fleet/FleetView';
-import { EnergyView } from './components/energy/EnergyView';
-import { ScenarioView } from './components/scenarios/ScenarioView';
-import { GuideView } from './components/guide/GuideView';
-import { ControlView } from './components/control/ControlView';
-import { clsx } from 'clsx';
+import { useEffect, lazy, Suspense } from "react";
+import { useAppStore } from "./stores/useAppStore";
+import { Sidebar } from "./components/layout/Sidebar";
+import { Header } from "./components/layout/Header";
+const DashboardView = lazy(() =>
+  import("./components/dashboard/DashboardView").then((module) => ({
+    default: module.DashboardView,
+  })),
+);
+const MapView = lazy(() =>
+  import("./components/map/MapView").then((module) => ({
+    default: module.MapView,
+  })),
+);
+const FleetView = lazy(() =>
+  import("./components/fleet/FleetView").then((module) => ({
+    default: module.FleetView,
+  })),
+);
+const EnergyView = lazy(() =>
+  import("./components/energy/EnergyView").then((module) => ({
+    default: module.EnergyView,
+  })),
+);
+const ScenarioView = lazy(() =>
+  import("./components/scenarios/ScenarioView").then((module) => ({
+    default: module.ScenarioView,
+  })),
+);
+const GuideView = lazy(() =>
+  import("./components/guide/GuideView").then((module) => ({
+    default: module.GuideView,
+  })),
+);
+const ControlView = lazy(() =>
+  import("./components/control/ControlView").then((module) => ({
+    default: module.ControlView,
+  })),
+);
+import { clsx } from "clsx";
 
 function App() {
-  const { currentView, tick, isSimulationRunning, runOrchestrationCheck, isDarkMode } = useAppStore();
+  const {
+    currentView,
+    tick,
+    isSimulationRunning,
+    runOrchestrationCheck,
+    isDarkMode,
+  } = useAppStore();
 
   // Run simulation tick every 2 seconds
   useEffect(() => {
@@ -32,19 +66,19 @@ function App() {
 
   const renderView = () => {
     switch (currentView) {
-      case 'control':
+      case "control":
         return <ControlView />;
-      case 'dashboard':
+      case "dashboard":
         return <DashboardView />;
-      case 'map':
+      case "map":
         return <MapView />;
-      case 'fleet':
+      case "fleet":
         return <FleetView />;
-      case 'energy':
+      case "energy":
         return <EnergyView />;
-      case 'scenarios':
+      case "scenarios":
         return <ScenarioView />;
-      case 'guide':
+      case "guide":
         return <GuideView />;
       default:
         return <DashboardView />;
@@ -52,17 +86,27 @@ function App() {
   };
 
   return (
-    <div className={clsx(
-      'flex h-screen overflow-hidden transition-colors duration-200',
-      isDarkMode
-        ? 'bg-slate-950 text-white'
-        : 'bg-slate-100 text-slate-900 light'
-    )}>
+    <div
+      className={clsx(
+        "flex h-screen overflow-hidden transition-colors duration-200",
+        isDarkMode
+          ? "bg-slate-950 text-white"
+          : "bg-slate-100 text-slate-900 light",
+      )}
+    >
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
         <main className="relative z-0 isolate flex-1 overflow-auto p-4">
-          {renderView()}
+          <Suspense
+            fallback={
+              <p role="status" className="p-4 text-slate-400">
+                Loading demo view…
+              </p>
+            }
+          >
+            {renderView()}
+          </Suspense>
         </main>
       </div>
     </div>
