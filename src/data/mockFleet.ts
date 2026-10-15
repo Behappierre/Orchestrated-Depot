@@ -1,4 +1,5 @@
 import type { Vehicle } from '../types';
+import { getDepotPosition } from './belfast';
 
 // Generate 50 realistic vehicles across 3 depots
 export const mockVehicles: Vehicle[] = [
@@ -19,8 +20,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: 'CH-C01',
     location: 'Bay A1',
     assignedDuty: 'DUTY-001',
-    lat: 51.5321,
-    lng: -0.1241,
+    ...getDepotPosition('central', 0),
     soh: 96,
     odometer: 67800,
     efficiency: 1.35,
@@ -48,8 +48,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Bay A2',
     assignedDuty: 'DUTY-002',
-    lat: 51.5322,
-    lng: -0.1242,
+    ...getDepotPosition('central', 1),
     soh: 99,
     odometer: 12050,
     efficiency: 1.12,
@@ -77,8 +76,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: 'CH-C02',
     location: 'Bay A3',
     assignedDuty: 'DUTY-003',
-    lat: 51.5321,
-    lng: -0.1243,
+    ...getDepotPosition('central', 2),
     soh: 97,
     odometer: 45200,
     efficiency: 1.28,
@@ -106,8 +104,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Bay B1',
     assignedDuty: 'DUTY-004',
-    lat: 51.5322,
-    lng: -0.1244,
+    ...getDepotPosition('central', 3),
     soh: 84,
     odometer: 145000,
     efficiency: 1.52,
@@ -135,8 +132,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Bay B2',
     assignedDuty: null, // Available for swap
-    lat: 51.5323,
-    lng: -0.1241,
+    ...getDepotPosition('central', 4),
     soh: 99,
     odometer: 8500,
     efficiency: 1.08,
@@ -164,8 +160,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: 'CH-C03',
     location: 'Bay B3',
     assignedDuty: 'DUTY-005',
-    lat: 51.5321,
-    lng: -0.1245,
+    ...getDepotPosition('central', 5),
     soh: 95,
     odometer: 78400,
     efficiency: 1.42,
@@ -193,8 +188,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Bay C1',
     assignedDuty: 'DUTY-006',
-    lat: 51.5324,
-    lng: -0.1242,
+    ...getDepotPosition('central', 6),
     soh: 92,
     odometer: 112000,
     efficiency: 1.38,
@@ -223,8 +217,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Route 5A',
     assignedDuty: 'DUTY-007',
-    lat: 51.528,
-    lng: -0.118,
+    ...getDepotPosition('central', 7),
     route: 'Route 5A',
     progress: 0.45,
     soh: 98,
@@ -254,8 +247,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Route 10B',
     assignedDuty: 'DUTY-008',
-    lat: 51.538,
-    lng: -0.132,
+    ...getDepotPosition('central', 8),
     route: 'Route 10B',
     progress: 0.72,
     soh: 96,
@@ -285,8 +277,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: null,
     location: 'Route 25',
     assignedDuty: 'DUTY-009',
-    lat: 51.522,
-    lng: -0.108,
+    ...getDepotPosition('central', 9),
     route: 'Route 25',
     progress: 0.28,
     soh: 94,
@@ -305,7 +296,7 @@ export const mockVehicles: Vehicle[] = [
     rangeRemaining: 215,
   },
   // More Central depot vehicles
-  ...generateVehicles('central', 111, 125, 51.532, -0.124),
+  ...generateVehicles('central', 111, 125),
 
   // ============================================================================
   // NORTH DEPOT - 15 vehicles
@@ -322,8 +313,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: 'CH-N01',
     location: 'Bay N1',
     assignedDuty: 'DUTY-N01',
-    lat: 51.564,
-    lng: -0.106,
+    ...getDepotPosition('north', 0),
     soh: 97,
     odometer: 42000,
     efficiency: 1.22,
@@ -339,7 +329,7 @@ export const mockVehicles: Vehicle[] = [
     chargingTimeRemaining: 28,
     rangeRemaining: 205,
   },
-  ...generateVehicles('north', 202, 215, 51.564, -0.106),
+  ...generateVehicles('north', 202, 215),
 
   // ============================================================================
   // EAST DEPOT - 10 vehicles
@@ -356,8 +346,7 @@ export const mockVehicles: Vehicle[] = [
     chargerId: 'CH-E01',
     location: 'Bay E1',
     assignedDuty: 'DUTY-E01',
-    lat: 51.543,
-    lng: -0.009,
+    ...getDepotPosition('east', 0),
     soh: 91,
     odometer: 98500,
     efficiency: 1.48,
@@ -373,16 +362,14 @@ export const mockVehicles: Vehicle[] = [
     chargingTimeRemaining: 42,
     rangeRemaining: 168,
   },
-  ...generateVehicles('east', 302, 310, 51.543, -0.009),
+  ...generateVehicles('east', 302, 310),
 ];
 
 // Helper to generate additional vehicles
 function generateVehicles(
   depotId: string,
   startId: number,
-  endId: number,
-  baseLat: number,
-  baseLng: number
+  endId: number
 ): Vehicle[] {
   const models = [
     { model: 'eCitaro', manufacturer: 'Mercedes' as const },
@@ -417,8 +404,7 @@ function generateVehicles(
       chargerId: status === 'Charging' ? `CH-${depotId.charAt(0).toUpperCase()}${String(i).slice(-2)}` : null,
       location: `Bay ${String.fromCharCode(65 + Math.floor(Math.random() * 4))}${Math.floor(Math.random() * 4) + 1}`,
       assignedDuty: Math.random() > 0.3 ? `DUTY-${depotId.charAt(0).toUpperCase()}${String(i).slice(-2)}` : null,
-      lat: baseLat + (Math.random() - 0.5) * 0.002,
-      lng: baseLng + (Math.random() - 0.5) * 0.002,
+      ...getDepotPosition(depotId, i - startId + 10),
       soh,
       odometer,
       efficiency: 1.1 + Math.random() * 0.5,

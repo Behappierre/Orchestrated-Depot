@@ -1,5 +1,7 @@
 import type { Route } from '../types';
 
+// Illustrative Belfast corridors for simulation, not official Translink route shapes.
+
 export const mockRoutes: Route[] = [
   {
     id: 'route-5a',
@@ -7,14 +9,14 @@ export const mockRoutes: Route[] = [
     color: '#ef4444',
     depotId: 'central',
     waypoints: [
-      [51.532, -0.124],   // Central Depot (King's Cross)
-      [51.528, -0.118],   // Euston
-      [51.523, -0.108],   // Holborn
-      [51.515, -0.092],   // Bank
-      [51.508, -0.076],   // Tower Hill
-      [51.503, -0.055],   // Shadwell
-      [51.508, -0.040],   // Limehouse
-      [51.512, -0.025],   // Canary Wharf
+      [54.61802, -5.91547],
+      [54.61400, -5.91800],
+      [54.60930, -5.92190],
+      [54.60560, -5.92590],
+      [54.60250, -5.92590],
+      [54.60050, -5.92050],
+      [54.59840, -5.91650],
+      [54.59799, -5.91162],
     ],
     distanceKm: 145,
     estimatedDurationMin: 285, // ~4.75 hours round trip
@@ -28,11 +30,13 @@ export const mockRoutes: Route[] = [
     color: '#22c55e',
     depotId: 'central',
     waypoints: [
-      [51.532, -0.124],   // Central Depot
-      [51.538, -0.132],   // Camden Town
-      [51.548, -0.145],   // Hampstead
-      [51.558, -0.158],   // Golders Green
-      [51.565, -0.178],   // Brent Cross
+      [54.61802, -5.91547],
+      [54.61650, -5.92170],
+      [54.61890, -5.92790],
+      [54.62100, -5.93900],
+      [54.62830, -5.94020],
+      [54.63720, -5.94250],
+      [54.64960, -5.94360],
     ],
     distanceKm: 132,
     estimatedDurationMin: 265,
@@ -46,13 +50,14 @@ export const mockRoutes: Route[] = [
     color: '#3b82f6',
     depotId: 'central',
     waypoints: [
-      [51.532, -0.124],   // Central Depot
-      [51.522, -0.108],   // Chancery Lane
-      [51.515, -0.092],   // Bank
-      [51.512, -0.072],   // Aldgate
-      [51.520, -0.045],   // Mile End
-      [51.535, -0.022],   // Bow
-      [51.543, -0.009],   // Stratford
+      [54.61802, -5.91547],
+      [54.61400, -5.91800],
+      [54.60930, -5.92190],
+      [54.60550, -5.92580],
+      [54.60130, -5.92220],
+      [54.60330, -5.91240],
+      [54.60780, -5.90700],
+      [54.61200, -5.90310],
     ],
     distanceKm: 158,
     estimatedDurationMin: 310,
@@ -66,13 +71,14 @@ export const mockRoutes: Route[] = [
     color: '#f59e0b',
     depotId: 'central',
     waypoints: [
-      [51.532, -0.124],   // Central Depot
-      [51.540, -0.110],   // Angel
-      [51.552, -0.100],   // Highbury
-      [51.564, -0.106],   // Finsbury Park
-      [51.576, -0.098],   // Manor House
-      [51.588, -0.088],   // Seven Sisters
-      [51.592, -0.072],   // Tottenham
+      [54.61802, -5.91547],
+      [54.61400, -5.91800],
+      [54.60930, -5.92190],
+      [54.60270, -5.92980],
+      [54.59730, -5.93000],
+      [54.59120, -5.92830],
+      [54.58200, -5.92300],
+      [54.56720, -5.91040],
     ],
     distanceKm: 168,
     estimatedDurationMin: 320,
@@ -86,12 +92,13 @@ export const mockRoutes: Route[] = [
     color: '#8b5cf6',
     depotId: 'north',
     waypoints: [
-      [51.564, -0.106],   // North Depot (Finsbury Park)
-      [51.555, -0.088],   // Stoke Newington
-      [51.545, -0.072],   // Dalston
-      [51.532, -0.055],   // Hackney
-      [51.520, -0.045],   // Mile End
-      [51.508, -0.040],   // Limehouse
+      [54.58527, -5.97948],
+      [54.58900, -5.97150],
+      [54.59220, -5.96520],
+      [54.59630, -5.95500],
+      [54.59860, -5.94600],
+      [54.60000, -5.93780],
+      [54.59950, -5.93010],
     ],
     distanceKm: 125,
     estimatedDurationMin: 250,
@@ -105,11 +112,12 @@ export const mockRoutes: Route[] = [
     color: '#06b6d4',
     depotId: 'north',
     waypoints: [
-      [51.564, -0.106],   // North Depot
-      [51.572, -0.120],   // Crouch End
-      [51.582, -0.135],   // Archway
-      [51.592, -0.150],   // Highgate
-      [51.598, -0.175],   // Muswell Hill
+      [54.58527, -5.97948],
+      [54.58160, -5.98100],
+      [54.57820, -5.98540],
+      [54.57390, -5.99470],
+      [54.56910, -6.00670],
+      [54.56270, -6.02280],
     ],
     distanceKm: 138,
     estimatedDurationMin: 275,
@@ -123,12 +131,13 @@ export const mockRoutes: Route[] = [
     color: '#ec4899',
     depotId: 'east',
     waypoints: [
-      [51.543, -0.009],   // East Depot (Stratford)
-      [51.552, 0.008],    // Leyton
-      [51.558, 0.025],    // Leytonstone
-      [51.565, 0.042],    // Wanstead
-      [51.572, 0.062],    // Redbridge
-      [51.578, 0.082],    // Ilford
+      [54.59799, -5.91162],
+      [54.60070, -5.90800],
+      [54.59890, -5.89700],
+      [54.59680, -5.88400],
+      [54.59430, -5.87100],
+      [54.59480, -5.84980],
+      [54.59290, -5.83000],
     ],
     distanceKm: 142,
     estimatedDurationMin: 285,
@@ -142,13 +151,12 @@ export const mockRoutes: Route[] = [
     color: '#14b8a6',
     depotId: 'east',
     waypoints: [
-      [51.543, -0.009],   // East Depot
-      [51.535, -0.022],   // Bow
-      [51.520, -0.045],   // Mile End
-      [51.512, -0.072],   // Aldgate
-      [51.505, -0.088],   // Monument
-      [51.498, -0.108],   // Waterloo
-      [51.492, -0.125],   // Lambeth North
+      [54.59799, -5.91162],
+      [54.59580, -5.91170],
+      [54.59350, -5.90800],
+      [54.58800, -5.90170],
+      [54.58180, -5.89400],
+      [54.57520, -5.88850],
     ],
     distanceKm: 155,
     estimatedDurationMin: 305,

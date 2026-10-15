@@ -37,6 +37,12 @@ export function GuideView() {
             This demo showcases the <strong>Orchestrated Depot</strong> concept—a digital control
             tower that unifies fragmented operational systems into a single intelligent layer.
           </p>
+          <p>
+            The map uses approximate locations for Belfast's Milewater Service Centre,
+            Falls Road and Short Strand depots. Vehicles, chargers, routes, schedules,
+            integration indicators and performance figures are illustrative simulation data,
+            rather than live Translink operations. Route traces are schematic.
+          </p>
 
           <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
             <h4 className="font-semibold text-white mb-2">The Core Problem</h4>

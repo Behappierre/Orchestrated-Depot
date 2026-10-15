@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, Polygon, useMap } from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, Polygon, CircleMarker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppStore } from '../../stores/useAppStore';
+import { belfastCenter, belfastDepots } from '../../data/belfast';
 import { clsx } from 'clsx';
 import {
   Layers,
@@ -85,55 +86,81 @@ const createChargerIcon = (status: string) => {
 };
 
 // Map controls component
-function MapControls() {
+function MapControls({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
+
+  // MapContainer only uses its initial center; follow subsequent depot selections.
+  useEffect(() => {
+    map.setView([lat, lng], map.getZoom());
+  }, [map, lat, lng]);
+
+  const showNetwork = () => {
+    map.fitBounds(Object.values(belfastDepots).map((depot) => [depot.lat, depot.lng]), {
+      paddingTopLeft: [240, 65], paddingBottomRight: [70, 65], maxZoom: 14,
+    });
+  };
+
+  // Start with the Belfast network visible, then follow the depot selector.
+  useEffect(() => {
+    map.fitBounds(Object.values(belfastDepots).map((depot) => [depot.lat, depot.lng]), {
+      paddingTopLeft: [240, 65], paddingBottomRight: [70, 65], maxZoom: 14,
+    });
+  }, [map]);
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
       <button
         onClick={() => map.zoomIn()}
+        aria-label="Zoom in"
         className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-white hover:bg-slate-700 transition-colors shadow-lg"
       >
         <ZoomIn className="w-5 h-5" />
       </button>
       <button
         onClick={() => map.zoomOut()}
+        aria-label="Zoom out"
         className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-white hover:bg-slate-700 transition-colors shadow-lg"
       >
         <ZoomOut className="w-5 h-5" />
       </button>
       <button
-        onClick={() => map.setView([51.532, -0.124], 15)}
+        onClick={() => map.setView([lat, lng], 15)}
+        aria-label="Center on selected depot"
         className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-white hover:bg-slate-700 transition-colors shadow-lg"
       >
         <Locate className="w-5 h-5" />
+      </button>
+      <button
+        onClick={showNetwork}
+        aria-label="Show all Belfast depots"
+        title="Show all Belfast depots"
+        className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center text-white hover:bg-slate-700 transition-colors shadow-lg"
+      >
+        <Layers className="w-5 h-5" />
       </button>
     </div>
   );
 }
 
 export function MapView() {
-  const { vehicles, chargers, routes, depots, selectedDepotId, isDarkMode } = useAppStore();
+  const { vehicles, chargers, routes, depots, selectedDepotId } = useAppStore();
   const [showRoutes, setShowRoutes] = useState(true);
   const [showChargers, setShowChargers] = useState(true);
   const [showVehicles, setShowVehicles] = useState(true);
 
   const selectedDepot = depots.find((d) => d.id === selectedDepotId);
   const depotVehicles = vehicles.filter((v) => v.depotId === selectedDepotId);
-  const depotChargers = chargers.filter((c) => c.depotId === selectedDepotId);
-  const depotRoutes = routes.filter((r) => r.depotId === selectedDepotId);
 
-  const tileUrl = isDarkMode
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  // Standard OSM tiles need no API key. Keep browser caching and referrers enabled.
+  const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   // Depot zone polygon (simplified rectangle around depot)
   const depotZone = selectedDepot
     ? [
-        [selectedDepot.lat + 0.002, selectedDepot.lng - 0.003],
-        [selectedDepot.lat + 0.002, selectedDepot.lng + 0.003],
-        [selectedDepot.lat - 0.002, selectedDepot.lng + 0.003],
-        [selectedDepot.lat - 0.002, selectedDepot.lng - 0.003],
+        [selectedDepot.lat + 0.0006, selectedDepot.lng - 0.0009],
+        [selectedDepot.lat + 0.0006, selectedDepot.lng + 0.0009],
+        [selectedDepot.lat - 0.0006, selectedDepot.lng + 0.0009],
+        [selectedDepot.lat - 0.0006, selectedDepot.lng - 0.0009],
       ] as [number, number][]
     : [];
 
@@ -154,7 +181,7 @@ export function MapView() {
               className="rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500"
             />
             <Bus className="w-4 h-4 text-emerald-400" />
-            <span className="text-sm text-slate-300">Vehicles ({depotVehicles.length})</span>
+            <span className="text-sm text-slate-300">Vehicles ({vehicles.length})</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -164,7 +191,7 @@ export function MapView() {
               className="rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500"
             />
             <Zap className="w-4 h-4 text-blue-400" />
-            <span className="text-sm text-slate-300">Chargers ({depotChargers.length})</span>
+            <span className="text-sm text-slate-300">Chargers ({chargers.length})</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -174,9 +201,13 @@ export function MapView() {
               className="rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500"
             />
             <Route className="w-4 h-4 text-amber-400" />
-            <span className="text-sm text-slate-300">Routes ({depotRoutes.length})</span>
+            <span className="text-sm text-slate-300">Illustrative routes ({routes.length})</span>
           </label>
         </div>
+
+        <p className="text-xs text-slate-400 mt-3 max-w-[185px]">
+          Belfast demo · simulated fleet and chargers at approximate depot locations
+        </p>
 
         {/* Status Legend */}
         <div className="mt-4 pt-4 border-t border-slate-700">
@@ -219,17 +250,22 @@ export function MapView() {
 
       {/* Map */}
       <MapContainer
-        center={selectedDepot ? [selectedDepot.lat, selectedDepot.lng] : [51.532, -0.124]}
+        center={belfastCenter}
         zoom={14}
+        maxZoom={19}
         className="h-full w-full"
         zoomControl={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url={tileUrl}
+          maxZoom={19}
         />
 
-        <MapControls />
+        <MapControls
+          lat={selectedDepot?.lat ?? belfastCenter[0]}
+          lng={selectedDepot?.lng ?? belfastCenter[1]}
+        />
 
         {/* Depot Zone */}
         {depotZone.length > 0 && (
@@ -244,9 +280,27 @@ export function MapView() {
           />
         )}
 
-        {/* Routes */}
+        {depots.map((depot) => (
+          <CircleMarker
+            key={depot.id}
+            center={[depot.lat, depot.lng]}
+            radius={9}
+            pathOptions={{ color: '#ffffff', weight: 3, fillColor: '#2563eb', fillOpacity: 1 }}
+          >
+            <Tooltip permanent direction="top" offset={[0, -12]}>
+              {depot.name} · {vehicles.filter((vehicle) => vehicle.depotId === depot.id).length} buses
+            </Tooltip>
+            <Popup>
+              <strong>{depot.name}</strong><br />
+              {depot.location}<br />
+              Approximate site · simulated operations
+            </Popup>
+          </CircleMarker>
+        ))}
+
+        {/* Illustrative Belfast routes */}
         {showRoutes &&
-          depotRoutes.map((route) => (
+          routes.map((route) => (
             <Polyline
               key={route.id}
               positions={route.waypoints}
@@ -261,10 +315,12 @@ export function MapView() {
 
         {/* Chargers */}
         {showChargers &&
-          depotChargers.map((charger) => {
+          chargers.map((charger) => {
             // Position chargers around the depot
-            const chargerLat = (selectedDepot?.lat || 51.532) + (charger.y - 150) * 0.00002;
-            const chargerLng = (selectedDepot?.lng || -0.124) + (charger.x - 175) * 0.00003;
+            const chargerDepot = depots.find((depot) => depot.id === charger.depotId);
+            if (!chargerDepot) return null;
+            const chargerLat = chargerDepot.lat + (charger.y - 150) * 0.000003;
+            const chargerLng = chargerDepot.lng + (charger.x - 175) * 0.000005;
 
             return (
               <Marker
@@ -303,13 +359,14 @@ export function MapView() {
 
         {/* Vehicles */}
         {showVehicles &&
-          depotVehicles
+          vehicles
             .filter((v) => v.lat && v.lng)
             .map((vehicle) => (
               <Marker
                 key={vehicle.id}
                 position={[vehicle.lat, vehicle.lng]}
                 icon={createVehicleIcon(vehicle.status, vehicle.soc, vehicle.requiredSoC)}
+                zIndexOffset={200}
               >
                 <Popup className="dark-popup">
                   <div className="font-sans text-sm min-w-[150px]">
